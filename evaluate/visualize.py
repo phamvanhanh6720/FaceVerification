@@ -7,12 +7,13 @@ if __name__ == '__main__':
     parser = ArgumentParser("visualize comparison")
     parser.add_argument("-positive_pairs", "--positive_pairs",
                         default="/home/phamvanhanh/PycharmProjects/FaceVerification/result/positive_pairs.json",
-                        help="specify your json file that contain degree dictionary of positive pairs", type=str)
+                        help="specify your json file that contain results of positive pairs", type=str)
     parser.add_argument("-negative_pairs", "--negative_pairs",
                         default="/home/phamvanhanh/PycharmProjects/FaceVerification/result/negative_pairs.json",
-                        help="specify your json file that contain degree dictionary of negative pairs", type=str)
+                        help="specify your json file that contain results of negative pairs", type=str)
     parser.add_argument("-figure", "--figure",
-                        default="/home/phamvanhanh/PycharmProjects/FaceVerification/result/result.png", type=str)
+                        default="/home/phamvanhanh/PycharmProjects/FaceVerification/result/result.png",
+                        help='specify filepath to save result figure', type=str)
     args = parser.parse_args()
 
     degrees_dictionary1 = json.loads(open(args.positive_pairs, 'r').read())
@@ -30,14 +31,8 @@ if __name__ == '__main__':
 
     keys_intersection = [key for key in keys1 if key in keys2]
     data_intersection = [min(degrees_dictionary1[key], degrees_dictionary2[key]) for key in keys_intersection]
-    print(keys_intersection)
-    """    
-    for key in keys1:
-        print(key, ": ", degrees_dictionary1[key])
-        
-    for key in keys2:
-        print(key, ": ", degrees_dictionary2[key])
-        """
+    # print(keys_intersection)
+
     plt.bar(keys1, data1, color='#0047ab', label='positive_pairs')
     plt.bar(keys2, data2, color='#FF0000', label='negative_pairs')
     plt.bar(keys_intersection, data_intersection, color='#802456')
