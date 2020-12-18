@@ -23,7 +23,13 @@ def calculate_PR(degrees_dictionary1, degrees_dictionary2, threshold):
     recall = TP/(TP+FN)
     accuracy = (TP+TN)/(TP+TN+FP+FN)
 
-    return precision, recall, accuracy
+    TPR = TP/ (TP+FN)
+    FPR = FP / (FP + TN)
+
+    FNR = FN / (TP+FN)
+    TNR = TN / (FP + TN)
+
+    return precision, recall, accuracy, TPR, FPR, FNR, TNR
 
 
 if __name__ == '__main__':
@@ -43,24 +49,23 @@ if __name__ == '__main__':
     # precision, recall = calculate_PR(degrees_dictionary1, degrees_dictionary2, 70)
 
     thresholds = np.arange(10, 100, 5)[::-1]
-    cosins = np.cos(thresholds)
 
     precisions = list()
     recalls = list()
     for threshold in thresholds:
-        pre, re, _ = calculate_PR(degrees_dictionary1, degrees_dictionary2, threshold)
+        pre, re, _0, _1, _2, _3, _4 = calculate_PR(degrees_dictionary1, degrees_dictionary2, threshold)
         precisions.append(pre)
         recalls.append(re)
 
     f1_scores = 2 / ((1/np.array(precisions)) + (1/np.array(recalls)))
     args_max = np.argmax(f1_scores)
     chose_threshold = thresholds[args_max]
-    _, __, accuracy = calculate_PR(degrees_dictionary1, degrees_dictionary2, chose_threshold)
+    _0, _1, accuracy, TAR, FAR, _4, _5 = calculate_PR(degrees_dictionary1, degrees_dictionary2, chose_threshold)
     print("Accuracy: {:.2f}".format(accuracy))
     print("F1-Score: {:.2f}".format(f1_scores[args_max]))
     print("Chose_threshold: ", chose_threshold)
-
-
+    print("True Acceptance Rate", TAR)
+    print("False Acceptace Rate", FAR)
 
     plt.plot(recalls, precisions, color='darkorange', lw=2)
     plt.xlim([0.0, 1.05])

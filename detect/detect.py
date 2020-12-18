@@ -122,6 +122,7 @@ class FaceDetector:
         inds = np.where(scores > self.confidence_threshold)[0]
         boxes = boxes[inds]
         landms = landms[inds]
+        print("shape of landms: ", landms.shape)
         scores = scores[inds]
 
         # keep top-K before NMS
